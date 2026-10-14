@@ -86,3 +86,23 @@ test('reduced motion: nada fica pendente de reveal', () => {
   const { doc } = setup({ reducedMotion: true, belowFold: true });
   assert.equal(doc.querySelectorAll('.is-pending').length, 0);
 });
+
+test('abrir um serviço não faz a lista pular: o botão tocado fica no lugar', () => {
+  const { win, doc } = setup();
+  const [a, , c] = toggles(doc);
+  a.click();
+  const tops = [500, 200]; // antes e depois da troca: o item fechado acima encolheu
+  c.getBoundingClientRect = () => ({ top: tops.shift() ?? 200 });
+  const calls = [];
+  win.scrollBy = (x, y) => calls.push([x, y]);
+  c.click();
+  assert.deepEqual(calls, [[0, -300]]);
+});
+
+test('abrir um serviço atualiza a barra de progresso', () => {
+  const { doc } = setup();
+  const bar = doc.querySelector('[data-progress]');
+  bar.style.width = '37%';
+  toggles(doc)[0].click();
+  assert.equal(bar.style.width, '0%');
+});

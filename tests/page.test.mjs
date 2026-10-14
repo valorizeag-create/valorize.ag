@@ -27,9 +27,9 @@ test('5 dores, a primeira é "Não sei por onde começar"', () => {
   assert.equal(t[0], 'Não sei por onde começar');
 });
 
-test('os dois botões de WhatsApp usam o link com a mensagem', () => {
+test('os três botões de WhatsApp usam o link com a mensagem', () => {
   const wa = [...doc.querySelectorAll('a[href^="https://wa.me/"]')].map((a) => a.getAttribute('href'));
-  assert.equal(wa.length, 2);
+  assert.equal(wa.length, 3);
   wa.forEach((h) => assert.equal(h, WA));
   assert.equal(new URL(WA).searchParams.get('text'), 'Olá! Vim pelo Instagram e quero entender como a Valorize pode ajudar o meu negócio.');
 });
@@ -67,3 +67,6 @@ test('fallback de overflow para iOS < 16 (Instagram in-app)', () => {
   const css = readFileSync('styles.css', 'utf8');
   assert.match(css, /body \{[^}]*overflow-x: hidden;[^}]*overflow-x: clip;/);
 });
+
+test('botão do cabeçalho abre o WhatsApp direto', () =>
+  assert.equal(doc.querySelector('.topbar .btn-pill').getAttribute('href'), WA));

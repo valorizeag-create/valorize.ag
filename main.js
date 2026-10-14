@@ -5,12 +5,12 @@ export function init(doc = document, win = window) {
   const root = doc.documentElement;
   root.classList.replace('no-js', 'js');
 
-  setupServices(doc);
-  setupProgress(doc, win);
+  const updateProgress = setupProgress(doc, win);
+  setupServices(doc, win, updateProgress);
   setupReveal(doc, win);
 }
 
-function setupServices(doc) {
+function setupServices(doc, win, onChange) {
   const toggles = [...doc.querySelectorAll('.service__toggle')];
   const setOpen = (btn, open) => {
     btn.setAttribute('aria-expanded', String(open));
@@ -22,15 +22,20 @@ function setupServices(doc) {
     setOpen(btn, false);
     btn.addEventListener('click', () => {
       const willOpen = btn.getAttribute('aria-expanded') !== 'true';
+      const before = btn.getBoundingClientRect().top;
       toggles.forEach((other) => setOpen(other, false));
       if (willOpen) setOpen(btn, true);
+      // Se um item aberto acima fechou, compensa a rolagem para o botão tocado não sair do dedo.
+      const shift = btn.getBoundingClientRect().top - before;
+      if (shift) win.scrollBy(0, shift);
+      onChange();
     });
   });
 }
 
 function setupProgress(doc, win) {
   const bar = doc.querySelector('[data-progress]');
-  if (!bar) return;
+  if (!bar) return () => {};
   const root = doc.documentElement;
   const update = () => {
     const max = root.scrollHeight - root.clientHeight;
@@ -39,6 +44,7 @@ function setupProgress(doc, win) {
   };
   win.addEventListener('scroll', update, { passive: true });
   update();
+  return update;
 }
 
 function setupReveal(doc, win) {
