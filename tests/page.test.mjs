@@ -54,3 +54,11 @@ test('sem copy de promessa do design antigo', () =>
   assert.doesNotMatch(body, /relatórios mensais de crescimento|Transformamos audiência em contato/));
 
 test('sem runtime do Claude Design', () => assert.doesNotMatch(html, /support\.js|x-dc|\{\{/));
+
+test('metadados', () => {
+  const meta = (name) => doc.querySelector(`meta[name="${name}"]`)?.content;
+  assert.equal(doc.title, 'Valorize | Agência de marketing');
+  assert.equal(meta('description'), 'Do planejamento à execução: estratégia, redes sociais, criativos, gravações e tráfego pago para pequenas e médias empresas. Fale com a Valorize no WhatsApp.');
+  assert.equal(doc.querySelector('meta[property="og:image"]')?.content, 'assets/og-image.png');
+  assert.equal(doc.documentElement.lang, 'pt-BR');
+});
