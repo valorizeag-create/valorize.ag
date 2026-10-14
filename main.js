@@ -1,0 +1,63 @@
+// Interações da página: sanfona de serviços, barra de progresso e aparecer ao rolar.
+// Sem JS a página funciona inteira: serviços abertos e nada escondido.
+
+export function init(doc = document, win = window) {
+  const root = doc.documentElement;
+  root.classList.replace('no-js', 'js');
+
+  setupServices(doc);
+  setupProgress(doc, win);
+  setupReveal(doc, win);
+}
+
+function setupServices(doc) {
+  const toggles = [...doc.querySelectorAll('.service__toggle')];
+  const setOpen = (btn, open) => {
+    btn.setAttribute('aria-expanded', String(open));
+    doc.getElementById(btn.getAttribute('aria-controls')).hidden = !open;
+    btn.querySelector('.service__icon').textContent = open ? '–' : '+';
+  };
+
+  toggles.forEach((btn) => {
+    setOpen(btn, false);
+    btn.addEventListener('click', () => {
+      const willOpen = btn.getAttribute('aria-expanded') !== 'true';
+      toggles.forEach((other) => setOpen(other, false));
+      if (willOpen) setOpen(btn, true);
+    });
+  });
+}
+
+function setupProgress(doc, win) {
+  const bar = doc.querySelector('[data-progress]');
+  if (!bar) return;
+  const root = doc.documentElement;
+  const update = () => {
+    const max = root.scrollHeight - root.clientHeight;
+    const ratio = max > 0 ? Math.min(1, root.scrollTop / max) : 0;
+    bar.style.width = `${+(ratio * 100).toFixed(1)}%`;
+  };
+  win.addEventListener('scroll', update, { passive: true });
+  update();
+}
+
+function setupReveal(doc, win) {
+  const reduced = win.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in win)) return;
+
+  const io = new win.IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.classList.remove('is-pending');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.15 });
+
+  doc.querySelectorAll('[data-reveal]').forEach((el) => {
+    if (el.getBoundingClientRect().top < win.innerHeight) return;
+    el.classList.add('is-pending');
+    io.observe(el);
+  });
+}
+
+if (typeof window !== 'undefined') init();
