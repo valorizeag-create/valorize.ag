@@ -22,6 +22,7 @@ body {
   font-family: var(--font);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* iOS < 16 não conhece clip */
   overflow-x: clip;
 }
 a { color: var(--navy); text-decoration: none; }

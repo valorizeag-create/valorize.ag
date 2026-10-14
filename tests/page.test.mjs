@@ -62,3 +62,8 @@ test('metadados', () => {
   assert.equal(doc.querySelector('meta[property="og:image"]')?.content, 'assets/og-image.png');
   assert.equal(doc.documentElement.lang, 'pt-BR');
 });
+
+test('fallback de overflow para iOS < 16 (Instagram in-app)', () => {
+  const css = readFileSync('styles.css', 'utf8');
+  assert.match(css, /body \{[^}]*overflow-x: hidden;[^}]*overflow-x: clip;/);
+});
