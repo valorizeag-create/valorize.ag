@@ -1,0 +1,7 @@
+# Publica só a página; docs, testes e arquivos do design ficam de fora.
+/*
+!index.html
+!styles.css
+!main.js
+!assets
+!vercel.json
