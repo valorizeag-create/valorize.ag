@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { JSDOM } from 'jsdom';
 
 const html = readFileSync('index.html', 'utf8');
@@ -27,9 +27,9 @@ test('5 dores, a primeira é "Não sei por onde começar"', () => {
   assert.equal(t[0], 'Não sei por onde começar');
 });
 
-test('os três botões de WhatsApp usam o link com a mensagem', () => {
+test('os quatro botões de WhatsApp usam o link com a mensagem', () => {
   const wa = [...doc.querySelectorAll('a[href^="https://wa.me/"]')].map((a) => a.getAttribute('href'));
-  assert.equal(wa.length, 3);
+  assert.equal(wa.length, 4);
   wa.forEach((h) => assert.equal(h, WA));
   assert.equal(new URL(WA).searchParams.get('text'), 'Olá! Vim pelo Instagram e quero entender como a Valorize pode ajudar o meu negócio.');
 });
@@ -39,9 +39,44 @@ test('instagram e e-mail', () => {
   assert.ok(doc.querySelector('a[href="mailto:valorize.ag@gmail.com"]'));
 });
 
-test('clientes oculto e contato numerado 004', () => {
-  assert.ok(doc.querySelector('#clientes').hidden);
-  assert.match(doc.querySelector('#contato').textContent, /004 — Contato/);
+test('depoimentos visíveis e contato numerado 005', () => {
+  assert.equal(doc.querySelector('#clientes').hidden, false);
+  assert.match(doc.querySelector('#clientes').textContent, /004 — Quem confia na Valorize/);
+  assert.match(doc.querySelector('#contato').textContent, /005 — Contato/);
+});
+
+const DEPOIMENTOS = [
+  ['Marcas Autoral', 'A Valorize trouxe mais estratégia e consistência para nossa comunicação digital.'],
+  ['Tayná Lima Carvalho', 'Hoje temos conteúdos mais estratégicos e alinhados ao nosso posicionamento.'],
+  ['Atlas Parafusos', 'A Valorize nos ajuda a modernizar nossa comunicação sem perder nossa essência.'],
+  ['Plantax Agro S/A', 'Uma parceria que fortalece nossa presença digital e valoriza nossa marca.'],
+  ['Climatiza Goiás', 'Mais organização, estratégia e profissionalismo na nossa comunicação.'],
+];
+
+test('5 depoimentos com nome e frase exatos, na ordem', () => {
+  const cards = [...doc.querySelectorAll('.testimonial')];
+  assert.deepEqual(
+    cards.map((c) => [c.querySelector('.testimonial__name').textContent.trim(), c.querySelector('.testimonial__quote').textContent.trim()]),
+    DEPOIMENTOS.map(([n, q]) => [n, `“${q}”`]),
+  );
+});
+
+test('cada depoimento tem logo com alt ou iniciais', () => {
+  doc.querySelectorAll('.testimonial').forEach((c) => {
+    const img = c.querySelector('img.testimonial__logo');
+    const initials = c.querySelector('.testimonial__initials');
+    assert.ok(img || initials, c.textContent);
+    if (img) {
+      assert.ok(existsSync(img.getAttribute('src')), img.getAttribute('src'));
+      assert.ok(img.alt.length > 0);
+    }
+  });
+});
+
+test('contato rápido no topo: WhatsApp, Instagram e e-mail', () => {
+  const links = [...doc.querySelectorAll('#topo .quick-contact a')];
+  assert.deepEqual(links.map((a) => a.getAttribute('href')), [WA, 'https://instagram.com/valorize.ag', 'mailto:valorize.ag@gmail.com']);
+  links.forEach((a) => assert.ok(a.textContent.trim().length > 0));
 });
 
 test('sem JS, todas as descrições de serviço estão visíveis', () => {
