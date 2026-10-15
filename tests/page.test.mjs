@@ -54,7 +54,7 @@ const DEPOIMENTOS = [
 ];
 
 test('5 depoimentos com nome e frase exatos, na ordem', () => {
-  const cards = [...doc.querySelectorAll('.testimonial')];
+  const cards = [...doc.querySelectorAll('.testimonial:not([aria-hidden])')];
   assert.deepEqual(
     cards.map((c) => [c.querySelector('.testimonial__name').textContent.trim(), c.querySelector('.testimonial__quote').textContent.trim()]),
     DEPOIMENTOS.map(([n, q]) => [n, `“${q}”`]),
@@ -111,4 +111,11 @@ test('botão do cabeçalho abre o WhatsApp direto', () =>
 test('reduzir movimento não desliga faixa, selo nem reveal (decisão da Valorize)', () => {
   const css = readFileSync('styles.css', 'utf8');
   assert.doesNotMatch(css, /prefers-reduced-motion/);
+});
+
+test('contato rápido tem o rótulo "Fale direto com a gente" e WhatsApp em destaque', () => {
+  assert.equal(text('#topo .quick-contact__label'), 'Fale direto com a gente');
+  const links = [...doc.querySelectorAll('#topo .quick-contact a')];
+  assert.deepEqual(links.map((a) => a.textContent.trim()), ['WhatsApp', 'Instagram', 'E-mail']);
+  assert.ok(links[0].classList.contains('contact-btn--accent'));
 });

@@ -8,6 +8,22 @@ export function init(doc = document, win = window) {
   const updateProgress = setupProgress(doc, win);
   setupServices(doc, win, updateProgress);
   setupReveal(doc, win);
+  setupTestimonials(doc);
+}
+
+// Depoimentos rodando em loop: duplica os cartões (cópias escondidas do leitor de tela)
+// para a faixa andar até -50% e recomeçar sem emenda. Sem JS, a faixa só desliza no dedo.
+function setupTestimonials(doc) {
+  const wrap = doc.querySelector('.testimonials');
+  const track = wrap?.querySelector('.testimonials__track');
+  if (!track) return;
+  [...track.children].forEach((li) => {
+    const copy = li.cloneNode(true);
+    copy.setAttribute('aria-hidden', 'true');
+    copy.querySelectorAll('img').forEach((img) => img.setAttribute('alt', ''));
+    track.append(copy);
+  });
+  wrap.classList.add('is-marquee');
 }
 
 function setupServices(doc, win, onChange) {

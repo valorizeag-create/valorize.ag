@@ -106,3 +106,16 @@ test('abrir um serviço atualiza a barra de progresso', () => {
   toggles(doc)[0].click();
   assert.equal(bar.style.width, '0%');
 });
+
+test('depoimentos: com JS a faixa é duplicada para rodar em loop, cópias escondidas do leitor de tela', () => {
+  const { doc } = setup();
+  const track = doc.querySelector('.testimonials__track');
+  const items = [...track.children];
+  assert.equal(items.length, 10);
+  assert.ok(doc.querySelector('.testimonials').classList.contains('is-marquee'));
+  items.slice(0, 5).forEach((li) => assert.equal(li.getAttribute('aria-hidden'), null));
+  items.slice(5).forEach((li) => {
+    assert.equal(li.getAttribute('aria-hidden'), 'true');
+    li.querySelectorAll('img').forEach((img) => assert.equal(img.getAttribute('alt'), ''));
+  });
+});
