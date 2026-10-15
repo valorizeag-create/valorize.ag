@@ -72,3 +72,8 @@ test('fallback de overflow para iOS < 16 (Instagram in-app)', () => {
 
 test('botão do cabeçalho abre o WhatsApp direto', () =>
   assert.equal(doc.querySelector('.topbar .btn-pill').getAttribute('href'), WA));
+
+test('reduzir movimento não desliga faixa, selo nem reveal (decisão da Valorize)', () => {
+  const css = readFileSync('styles.css', 'utf8');
+  assert.doesNotMatch(css, /prefers-reduced-motion/);
+});

@@ -202,9 +202,4 @@ a:focus-visible, .service__toggle:focus-visible { outline: 2px solid var(--navy)
 .js [data-reveal] { transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
 .js [data-reveal].is-pending { opacity: 0; transform: translateY(24px); }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .marquee__track, .seal { animation: none; }
-  .cta:active, .btn-pill:active, .contact-card:active { transform: none; }
-  .js [data-reveal] { transition: none; }
-}
+/* Animações ficam sempre ligadas, mesmo com "reduzir movimento" no aparelho (decisão da Valorize). */

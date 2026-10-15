@@ -48,8 +48,7 @@ function setupProgress(doc, win) {
 }
 
 function setupReveal(doc, win) {
-  const reduced = win.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  if (reduced || !('IntersectionObserver' in win)) return;
+  if (!('IntersectionObserver' in win)) return;
 
   const io = new win.IntersectionObserver((entries) => {
     entries.forEach((e) => {

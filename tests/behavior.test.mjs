@@ -82,9 +82,9 @@ test('reveal: acima da dobra não fica pendente', () => {
   assert.equal(doc.querySelectorAll('.is-pending').length, 0);
 });
 
-test('reduced motion: nada fica pendente de reveal', () => {
+test('reduzir movimento ligado: as animações de aparecer continuam (decisão da Valorize)', () => {
   const { doc } = setup({ reducedMotion: true, belowFold: true });
-  assert.equal(doc.querySelectorAll('.is-pending').length, 0);
+  assert.equal(doc.querySelectorAll('.is-pending').length, doc.querySelectorAll('[data-reveal]').length);
 });
 
 test('abrir um serviço não faz a lista pular: o botão tocado fica no lugar', () => {
