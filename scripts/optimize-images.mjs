@@ -37,6 +37,7 @@ const CLIENTS = {
   'marcas-autoral': { src: 'marcas-autoral.png', crop: { left: 250, top: 230, width: 500, height: 540 }, inner: 112, bg: '#eceff6' },
   plantax: { src: 'plantax.webp', crop: { left: 690, top: 305, width: 632, height: 632 }, inner: AVATAR, bg: '#0a1a5c' },
   atlas: { src: 'atlas.png', crop: null, inner: 150, bg: '#ffffff' },
+  tayna: { src: 'tayna.jpg', crop: null, inner: 128, bg: '#000000' },
 };
 
 mkdirSync(`${OUT}/clientes`, { recursive: true });

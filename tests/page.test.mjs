@@ -133,3 +133,9 @@ test('cada serviço tem botão "Quero saber sobre este serviço" com mensagem pr
     assert.equal(url.searchParams.get('text'), `Olá! Quero saber sobre ${name}.`);
   });
 });
+
+test('todos os 5 depoimentos têm logo (sem iniciais provisórias)', () => {
+  const cards = [...doc.querySelectorAll('.testimonial')];
+  assert.equal(cards.filter((c) => c.querySelector('img.testimonial__logo')).length, 5);
+  assert.equal(doc.querySelectorAll('.testimonial__initials').length, 0);
+});

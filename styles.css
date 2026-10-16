@@ -213,11 +213,7 @@ a:focus-visible, .service__toggle:focus-visible { outline: 2px solid var(--navy)
 .testimonials.is-marquee:hover .testimonials__track { animation-play-state: paused; }
 .testimonial__quote { margin: 0; font-size: 19px; line-height: 1.35; letter-spacing: -.015em; font-weight: 700; text-wrap: pretty; }
 .testimonial__author { display: flex; align-items: center; gap: 12px; }
-.testimonial__logo, .testimonial__initials { width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0; }
-.testimonial__initials {
-  display: flex; align-items: center; justify-content: center;
-  background: var(--navy); color: var(--accent); font-size: 18px; font-weight: 700; letter-spacing: .02em;
-}
+.testimonial__logo { width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0; }
 .testimonial__name { font-size: 15px; font-weight: 700; color: var(--navy); }
 #clientes { padding-left: 0; padding-right: 0; }
 #clientes > .container { max-width: 608px; padding: 0 24px; }
