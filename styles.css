@@ -50,7 +50,7 @@ img { display: block; }
 .btn-pill {
   display: flex; align-items: center; min-height: 44px; padding: 0 18px;
   border-radius: 999px; background: var(--ink); color: var(--bg);
-  font-size: 14px; font-weight: 700;
+  font-size: 14px; font-weight: 700; white-space: nowrap;
   transition: background .2s, color .2s, transform .1s;
 }
 .btn-pill:hover, .btn-pill:active { background: var(--navy); color: var(--accent); }
@@ -151,6 +151,21 @@ a:focus-visible, .service__toggle:focus-visible { outline: 2px solid var(--navy)
 .service__panel {
   margin: -10px 0 0 38px; padding-bottom: 22px;
   font-size: 15px; line-height: 1.55; color: var(--muted); text-wrap: pretty;
+}
+.service__panel p { margin: 0; }
+.service__panel[hidden] { display: none; }
+.service__cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 14px;
+  min-height: 46px; padding: 0 16px 0 18px; border-radius: 999px; white-space: nowrap;
+  background: var(--accent); color: var(--ink); font-size: 14px; font-weight: 700;
+  transition: background .2s, transform .1s;
+}
+.service__cta::after { content: "→"; font-size: 16px; }
+.service__cta:hover, .service__cta:active { background: #4fcff7; color: var(--ink); }
+.service__cta:active { transform: scale(.97); }
+@media (max-width: 359px) {
+  .btn-pill { padding: 0 14px; }
+  .service__cta { white-space: normal; padding: 10px 16px; border-radius: 18px; line-height: 1.3; }
 }
 
 /* Como pensamos */

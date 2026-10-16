@@ -28,7 +28,7 @@ test('5 dores, a primeira é "Não sei por onde começar"', () => {
 });
 
 test('os quatro botões de WhatsApp usam o link com a mensagem', () => {
-  const wa = [...doc.querySelectorAll('a[href^="https://wa.me/"]')].map((a) => a.getAttribute('href'));
+  const wa = [...doc.querySelectorAll('a[href^="https://wa.me/"]:not(.service__cta)')].map((a) => a.getAttribute('href'));
   assert.equal(wa.length, 4);
   wa.forEach((h) => assert.equal(h, WA));
   assert.equal(new URL(WA).searchParams.get('text'), 'Olá! Vim pelo Instagram e quero entender como a Valorize pode ajudar o meu negócio.');
@@ -118,4 +118,18 @@ test('contato rápido tem o rótulo "Fale direto com a gente" e WhatsApp em dest
   const links = [...doc.querySelectorAll('#topo .quick-contact a')];
   assert.deepEqual(links.map((a) => a.textContent.trim()), ['WhatsApp', 'Instagram', 'E-mail']);
   assert.ok(links[0].classList.contains('contact-btn--accent'));
+});
+
+test('cada serviço tem botão "Quero saber sobre este serviço" com mensagem própria no WhatsApp', () => {
+  const services = [...doc.querySelectorAll('.service')];
+  assert.equal(services.length, 7);
+  services.forEach((s) => {
+    const name = s.querySelector('.service__name').textContent.trim();
+    const cta = s.querySelector('.service__panel a.service__cta');
+    assert.ok(cta, name);
+    assert.equal(cta.textContent.trim(), 'Quero saber sobre este serviço');
+    const url = new URL(cta.getAttribute('href'));
+    assert.equal(url.origin + url.pathname, 'https://wa.me/556294780968');
+    assert.equal(url.searchParams.get('text'), `Olá! Quero saber sobre ${name}.`);
+  });
 });
